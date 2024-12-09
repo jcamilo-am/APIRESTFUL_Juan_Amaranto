@@ -1,0 +1,568 @@
+openapi: 3.0.0
+info:
+  title: API de Gestión de Facturas
+  description: API para gestionar facturas, detalles de facturas, productos, usuarios y roles.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /register:
+    post:
+      summary: Registrar un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: Usuario registrado exitosamente
+        '400':
+          description: Error en la validación de datos
+
+  /login:
+    post:
+      summary: Iniciar sesión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Inicio de sesión exitoso
+        '401':
+          description: Credenciales inválidas
+
+  /users:
+    get:
+      summary: Obtener todos los usuarios
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    username:
+                      type: string
+                    email:
+                      type: string
+
+    post:
+      summary: Crear un nuevo usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+        '400':
+          description: Error en la validación de datos
+
+  /users/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Usuario encontrado
+        '404':
+          description: Usuario no encontrado
+
+    put:
+      summary: Actualizar un usuario
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Usuario actualizado exitosamente
+        '404':
+          description: Usuario no encontrado
+
+    delete:
+      summary: Eliminar un usuario
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Usuario eliminado exitosamente
+        '404':
+          description: Usuario no encontrado
+
+  /invoices:
+    post:
+      summary: Crear una nueva factura
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+                userId:
+                  type: string
+      responses:
+        '201':
+          description: Factura creada exitosamente
+        '400':
+          description: Error en la validación de datos
+
+    get:
+      summary: Obtener todas las facturas
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de facturas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    total:
+                      type: number
+                    userId:
+                      type: string
+
+  /invoices/{id}:
+    get:
+      summary: Obtener una factura por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la factura
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Factura encontrada
+        '404':
+          description: Factura no encontrada
+
+    put:
+      summary: Actualizar una factura
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la factura
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: number
+      responses:
+        '200':
+          description: Factura actualizada exitosamente
+        '404':
+          description: Factura no encontrada
+
+    delete:
+      summary: Eliminar una factura
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la factura
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Factura eliminada exitosamente
+        '404':
+          description: Factura no encontrada
+
+  /invoices/{id}/details:
+    get:
+      summary: Obtener detalles de una factura
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la factura
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalles de la factura encontrados
+        '404':
+          description: Factura no encontrada
+
+  /products:
+    post:
+      summary: Crear un nuevo producto
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '201':
+          description: Producto creado exitosamente
+        '400':
+          description: Error en la validación de datos
+
+    get:
+      summary: Obtener todos los productos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    price:
+                      type: number
+
+  /products/{id}:
+    get:
+      summary: Obtener un producto por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto encontrado
+        '404':
+          description: Producto no encontrado
+
+    put:
+      summary: Actualizar un producto
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '200':
+          description: Producto actualizado exitosamente
+        '404':
+          description: Producto no encontrado
+
+    delete:
+      summary: Eliminar un producto
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Producto eliminado exitosamente
+        '404':
+          description: Producto no encontrado
+
+  /roles:
+    post:
+      summary: Crear un nuevo rol
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Rol creado exitosamente
+        '400':
+          description: Error en la validación de datos
+
+    get:
+      summary: Obtener todos los roles
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+
+  /roles/{id}:
+    get:
+      summary: Obtener un rol por ID
+      security:
+        - bearerAuth: []
+      parameters:
+ - name: id
+          in: path
+          required: true
+          description: ID del rol
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rol encontrado
+        '404':
+          description: Rol no encontrado
+
+    put:
+      summary: Actualizar un rol
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del rol
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Rol actualizado exitosamente
+        '404':
+          description: Rol no encontrado
+
+    delete:
+      summary: Eliminar un rol
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del rol
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Rol eliminado exitosamente
+        '404':
+          description: Rol no encontrado
+
+  /user-roles:
+    post:
+      summary: Asignar un rol a un usuario
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                roleId:
+                  type: string
+      responses:
+        '201':
+          description: Rol asignado exitosamente
+        '400':
+          description: Error en la validación de datos
+
+    get:
+      summary: Obtener todos los roles de usuario
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de roles de usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+                    roleId:
+                      type: string
+
+  /user-roles/{id}:
+    get:
+      summary: Obtener un rol de usuario por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del rol de usuario
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Rol de usuario encontrado
+        '404':
+          description: Rol de usuario no encontrado
+
+    delete:
+      summary: Eliminar un rol de usuario
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del rol de usuario
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Rol de usuario eliminado exitosamente
+        '404':
+          description: Rol de usuario no encontrado
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

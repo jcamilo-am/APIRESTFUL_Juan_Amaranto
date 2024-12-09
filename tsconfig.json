@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es6",                            // Compila a la versión ES6 de JavaScript.
+    "module": "CommonJS",                          // Define a CommomJS como el sistema de módulos.
+    "moduleResolution": "node",                    // Resuelve los módulos usando el algoritmo de Node.js.
+    "esModuleInterop": true,                       // Permite interoperabilidad entre módulos ES y CommonJS.
+    "forceConsistentCasingInFileNames": true,     // Asegura un uso consistente de mayúsculas y minúsculas en los nombres de archivos.
+    "strict": true,                                // Activa todas las verificaciones de tipo estricto.
+    "skipLibCheck": true,                          // Omite la verificación de tipos en archivos de declaración de bibliotecas.
+    "outDir": "./build",                            // Directorio de salida para los archivos compilados.
+    "rootDir": "./src",                            // Directorio raíz del código fuente.
+    "baseUrl": "./src",                            // Carpeta base para la resolución de módulos.
+    "resolveJsonModule": true,                   // Habilita la importación de archivos JSON.
+    "paths": {                                     // Define alias para rutas de importación.
+      "*": ["node_modules/*", "*"]                 // Permite importar desde node_modules o desde src.
+    },
+    "lib": ["es6", "dom"],                         // Incluye las definiciones de tipos para ES6 y DOM.
+    "sourceMap": true, // Habilita la generacion de archivos de mapa de origen
+    "removeComments": true
+  },
+  "include": ["src/**/*"],                         // Incluye todos los archivos en la carpeta src.
+  "exclude": ["node_modules", "**/*.spec.ts"]     // Excluye node_modules y archivos .spec.ts.
+}
